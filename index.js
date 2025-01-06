@@ -1,7 +1,7 @@
 require("dotenv").config();
 const { SolanaTracker } = require("solana-swap");
 const { Keypair, PublicKey, Connection } = require("@solana/web3.js");
-const bs58 = require("bs58");
+const bs58 = require("bs58").default;
 const winston = require("winston");
 const chalk = require("chalk");
 const axios = require("axios");
