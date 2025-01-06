@@ -28,14 +28,37 @@ Includes two examples, one using HTTP requests and one using the more efficient 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/YZYLAB/solana-trading-bot.git
+git clone https://github.com/adzza/solana-trading-bot.git
 cd solana-trading-bot
 ```
 
 2. Install dependencies:
 ```bash
 npm install
+apt install curl
+apt install git
+npm install dotenv
+
 ```
+
+Update nvm (Node Version Manager) to the latest version.
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+
+Restart your terminal or run:
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion (optional)
+
+Install the LTS version of Node.js.
+
+nvm install --lts
+
+Use the newly installed version.
+
+nvm use --lts
+
 
 3. Rename the .env.example and configure the bot.
 
