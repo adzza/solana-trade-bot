@@ -24,7 +24,7 @@ Includes two examples, one using HTTP requests and one using the more efficient 
 - A Solana wallet with SOL
 - API Key (Billing Token) from [Solana Tracker Data API](https://docs.solanatracker.io)
 
-## Installation
+## Installation (fresh Ubuntu 22.04 Install)
 
 1. Clone the repository:
 ```bash
@@ -38,6 +38,8 @@ npm install
 apt install curl
 apt install git
 npm install dotenv
+npm install bs58
+
 
 ```
 
