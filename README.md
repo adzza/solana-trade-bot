@@ -39,6 +39,8 @@ apt install curl
 apt install git
 npm install dotenv
 npm install bs58
+npm update
+
 
 
 ```
