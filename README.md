@@ -152,6 +152,14 @@ For better reliability and higher rate limits, consider using premium providers 
 2. Navigate to the WebSocket section in your Solana Tracker dashboard.
 3. Copy your unique WebSocket URL (e.g., `wss://websocket.solanatracker.io`).
 
+##   Available Rooms for Subscriptions
+
+latest	Updates about new tokens and pools
+price:poolId	Price updates for a specific pool
+transaction:tokenAddress	Transactions for a specific token
+wallet:walletAddress	
+
+
 ### Step 4: Add Configuration to `.env`
 
 Add your API key, RPC URL, and WebSocket URL to your `.env` file:
@@ -176,12 +184,19 @@ The WebSocket API allows you to stream real-time data such as price updates, tra
 
 ### Available Rooms for Subscriptions
 
-| Room Name                             | Description                                                                 |
-|---------------------------------------|-----------------------------------------------------------------------------|
-| `latest`                              | Updates about new tokens and pools                                          |
-| `price:poolId`                        | Price updates for a specific pool                                           |
-| `transaction:tokenAddress`            | Transactions for a specific token                                           |
-| `wallet:walletAddress`                | Transactions involving a specific wallet                                    |
+### **WebSocket Rooms Table**
+
+| **Room Name**                          | **Description**                                                                 |
+|----------------------------------------|---------------------------------------------------------------------------------|
+| `latest`                               | Updates about new tokens and pools.                                            |
+| `price:poolId`                         | Price updates for a specific pool (`poolId`).                                  |
+| `transaction:tokenAddress`             | Transactions for a specific token (`tokenAddress`).                            |
+| `transaction:tokenAddress:poolId`      | Transactions for a specific token pair and pool ID (`tokenAddress` & `poolId`).|
+| `price-by-token:tokenId`               | Price updates for a specific token (`tokenId`).                                |
+| `wallet:walletAddress`                 | Transactions involving a specific wallet (`walletAddress`).                    |
+| `pool:poolId`                          | Updates about changes in a specific pool (`poolId`).                           |
+| `graduating`                           | Notifications about graduating tokens nearing bonding curve completion.        |
+| `graduated`                            | Notifications about graduated tokens now available on Raydium.                |
 
 ---
 
@@ -216,17 +231,33 @@ Here’s a quick reference table explaining common terms used in this project:
 
 ---
 
-## ⚙️ Configuration Table
+## ⚙️ .env Configuration Table
 
 Customize the bot’s behavior by adjusting settings in your `.env` file:
 
-| Setting                  | Description                                                                 |
-|--------------------------|-----------------------------------------------------------------------------|
-| `AMOUNT`                | The amount of SOL to swap in each transaction                               |
-| `DELAY`                 | Delay between buying cycles (in milliseconds)                              |
-| `MONITOR_INTERVAL`      | Interval for monitoring positions (in milliseconds)                        |
-| `SLIPPAGE`              | Maximum allowed slippage (in percentage)                                   |
-| `PRIORITY_FEE`          | Priority fee for transactions                                              |
+
+| **Variable**                  | **Description**                                                                                     |
+|-------------------------------|-----------------------------------------------------------------------------------------------------|
+| `AMOUNT`                      | The amount of SOL to swap in each transaction.                                                     |
+| `DELAY`                       | Delay between buying cycles (in milliseconds).                                                    |
+| `MONITOR_INTERVAL`            | Interval for monitoring positions (in milliseconds).                                              |
+| `SLIPPAGE`                    | Maximum allowed slippage (in percentage).                                                         |
+| `PRIORITY_FEE`                | Priority fee for transactions.                                                                    |
+| `JITO`                        | Set to `"true"` to use Jito for transaction processing.                                            |
+| `RPC_URL`                     | Your Solana RPC URL (e.g., `https://api.mainnet-beta.solana.com`).                                 |
+| `API_KEY`                     | Your Solana Tracker API Key.                                                                      |
+| `PRIVATE_KEY`                 | Your wallet's private key in Base58 format.                                                      |
+| `WS_URL`                      | WebSocket URL for real-time data streaming (e.g., `wss://websocket.solanatracker.io`).            |
+| `MIN_LIQUIDITY` / `MAX_LIQUIDITY` | Liquidity range for token selection (minimum and maximum).                                       |
+| `MIN_MARKET_CAP` / `MAX_MARKET_CAP` | Market cap range for token selection (minimum and maximum).                                      |
+| `MIN_RISK_SCORE` / `MAX_RISK_SCORE` | Risk score range for token selection (minimum and maximum).                                      |
+| `REQUIRE_SOCIAL_DATA`         | Set to `"true"` to only trade tokens with social data.                                             |
+| `MAX_NEGATIVE_PNL` / `MAX_POSITIVE_PNL` | PnL thresholds for selling positions (maximum negative/positive profit-and-loss thresholds).    |
+| `MARKETS`                     | Comma-separated list of markets to trade on (e.g., `"raydium,orca,pumpfun,moonshot"`).            |
+
+---
+
+These tables can be copied directly into your GitHub README or documentation, and they will render perfectly with proper alignment and formatting!
 
 ---
 
