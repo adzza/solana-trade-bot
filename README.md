@@ -5,14 +5,22 @@ A **high-performance, automated trading bot** designed for trading Solana tokens
 
 ---
 
-## Credits
+## ⚠️ Warning
+
+- **Never share your API keys or wallet private keys with anyone.**
+- **Do not paste your private keys or API keys into any websites.**
+- Keep these sensitive details secure to protect your funds and data.
+
+---
+
+## 📜 Credits
 
 This project is a fork of [YZYLAB/solana-trade-bot](https://github.com/YZYLAB/solana-trade-bot).  
 All credits go to the original authors.
 
 ---
 
-## Features
+## ✨ Features
 
 - Automated buying and selling of Solana tokens.
 - Multi-token support.
@@ -24,7 +32,7 @@ All credits go to the original authors.
 
 ---
 
-## Supported Platforms
+## 🔗 Supported Platforms
 
 This bot integrates with the following platforms:
 
@@ -38,7 +46,7 @@ This bot integrates with the following platforms:
 
 ---
 
-## Why Use This Bot?
+## 🛠️ Why Use This Bot?
 
 - **Efficiency**: Automates trading to save time and reduce manual effort.
 - **Best Pricing**: Leverages aggregators like Jupiter to ensure optimal trade execution across multiple DEXs.
@@ -47,17 +55,15 @@ This bot integrates with the following platforms:
 
 ---
 
-## Includes
+## 📦 Includes
 
 This bot includes two examples:
 1. Using HTTP requests for fetching data.
 2. Using faster, more efficient WebSocket streams from Solana Tracker.
 
-Screenshot of the Trading Bot
-
 ---
 
-## Prerequisites
+## ✅ Prerequisites
 
 Before using this bot, ensure you have the following:
 
@@ -69,7 +75,7 @@ Before using this bot, ensure you have the following:
 
 ---
 
-## Installation (Fresh Ubuntu 22.04 Install)
+## 🚀 Installation (Fresh Ubuntu 22.04 Install)
 
 1. Clone the repository:
    ```bash
@@ -108,11 +114,95 @@ Before using this bot, ensure you have the following:
    nvm use --lts
    ```
 
-7. Rename `.env.example` to `.env` and configure the bot.
+7. Manually create a `.env` file and configure it.
 
 ---
 
-## Usage
+## 📝 Setting Up the `.env` File
+
+To configure the bot, you need a **Solana Tracker Data API Key** and an **RPC Endpoint URL**. Follow these steps to obtain them and set up your `.env` file:
+
+### Step 1: Get a Free Solana Tracker Data API Key
+
+1. Visit the [Solana Tracker API Documentation](https://docs.solanatracker.io/public-data-api/docs).
+2. Sign up for an account if you don’t already have one.
+3. After signing in, navigate to the **API Key Management** section.
+4. Generate a new API key (free tier is available for basic usage).
+5. Copy the generated API key.
+
+### Step 2: Get a Solana RPC Endpoint URL
+
+#### Option 1: Use a Free Public RPC
+Use the default Solana mainnet RPC:
+```plaintext
+https://api.mainnet-beta.solana.com
+```
+Note: Public RPCs are rate-limited and may not be suitable for high-frequency trading.
+
+#### Option 2: Use a Premium/Private RPC
+For better reliability and higher rate limits, consider using premium providers like:
+- [Ankr](https://www.ankr.com)
+- [Alchemy](https://www.alchemy.com/dapps/solana-tracker)
+- [Helius](https://dev.helius.xyz)
+
+### Step 3: Create and Configure Your `.env` File
+
+1. Create a new `.env` file in your project directory:
+   ```bash
+   touch .env
+   ```
+
+2. Open the `.env` file in a text editor:
+   ```bash
+   nano .env
+   ```
+
+3. Add the following content to your `.env` file:
+```plaintext
+# Bot Configuration
+AMOUNT=0.001
+DELAY=1000
+MONITOR_INTERVAL=3000
+SLIPPAGE=25
+PRIORITY_FEE=0.00005
+JITO=false
+
+# Solana Tracker API Key (replace with your actual key)
+API_KEY=your_solana_tracker_api_key_here
+
+# Solana RPC Endpoint URL (replace with your actual endpoint)
+RPC_URL=https://api.mainnet-beta.solana.com
+
+# WebSocket Configuration (replace with your WebSocket URL)
+WS_URL=wss://websocket-url-here
+
+# Wallet Configuration (replace with your wallet's private key in Base58 format)
+PRIVATE_KEY=your_base58_private_key_here
+
+# Token Filtering Parameters
+MIN_LIQUIDITY=1000
+MAX_LIQUIDITY=1000000
+MIN_MARKET_CAP=2000
+MAX_MARKET_CAP=10000000
+MIN_RISK_SCORE=0
+MAX_RISK_SCORE=8
+REQUIRE_SOCIAL_DATA=false
+
+# PnL Thresholds for Selling Positions
+MAX_NEGATIVE_PNL=-50
+MAX_POSITIVE_PNL=5
+
+# Markets to Trade On (Comma-Separated)
+MARKETS=raydium,orca,pumpfun,moonshot,raydium-cpmm
+```
+
+4. Replace placeholders (`your_solana_tracker_api_key_here`, `your_base58_private_key_here`, etc.) with your actual values.
+
+5. Save and exit (`CTRL+O`, then `Enter`, followed by `CTRL+X` in nano).
+
+---
+
+## ▶️ Usage
 
 Run the bot using one of the following commands:
 
@@ -123,12 +213,12 @@ node index.js
 or
 
 ```bash
-node websocket.js
+node websocket.js 
 ```
 
 ---
 
-## Configuration
+## ⚙️ Configuration
 
 Customize the bot's behavior by adjusting settings in your `.env` file:
 
@@ -152,13 +242,7 @@ Customize the bot's behavior by adjusting settings in your `.env` file:
 
 ---
 
-## API Usage and Fees
-
-This bot uses the **Solana Tracker API**. Please refer to [Solana Tracker's documentation](https://docs.solanatracker.io) for details about API usage and associated fees.
-
----
-
-## Disclaimer
+## ❗ Disclaimer
 
 This bot is for educational purposes only. Use at your own risk. Always understand the code you're running and the potential financial implications of automated trading.
 
@@ -166,33 +250,32 @@ The goal of this project is to demonstrate potential ways of using the Solana Tr
 
 ---
 
-## License
+## 📜 License
 
 This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-## Contributing
+## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!  
 Feel free to check the [issues page](https://github.com/YZYLAB/solana-trade-bot/issues).
 
 ---
 
-## Support
+## ⭐ Support
 
 If you find this project helpful, please consider giving it a ⭐️ on GitHub!
 
 --- 
 
-### Key Improvements:
-1. **Headings (`#`, `##`)**: Used consistently for clear sectioning.
-2. **Bullet Points (`-`)**: Used for lists like features or prerequisites.
-3. **Tables (`|---`)**: Used for configuration settings and supported platforms.
-4. **Code Blocks (` ```bash`)**: Added for commands and code snippets.
-5. **Image Embedding (`![Alt Text](URL)`)**: Included an example screenshot.
+### Key Features:
+1. Proper headings (`#`, `##`) for clear sectioning.
+2. Tables (`|---`) are used for structured information like settings or supported platforms.
+3. Code blocks (` ```bash`) are used consistently for commands and example configurations.
+4. Emojis (`⚠️`, `📜`) add visual appeal while maintaining readability.
 
-By pasting this directly into your GitHub README editor, it will render beautifully with proper formatting!
+Paste this directly into your GitHub README editor—it will render perfectly!
 
 Citations:
 [1] https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/quickstart-for-writing-on-github
