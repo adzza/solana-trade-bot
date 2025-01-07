@@ -60,7 +60,7 @@ This bot integrates with the following platforms:
 
 This bot includes two examples:
 1. Using HTTP requests for fetching data.
-2. Using faster, more efficient WebSocket streams from Solana Tracker.
+2. Using faster, more efficient WebSocket streams from Solana Tracker (this is a paid option via Solana Tracker.
 
 ---
 
@@ -156,6 +156,294 @@ The WebSocket API allows you to stream real-time data such as price updates, tra
 2. Navigate to the WebSocket section in your Solana Tracker dashboard.
 3. Copy your unique WebSocket URL (e.g., `wss://websocket.solanatracker.io`).
 
+Here’s the **formatted response in GitHub Markdown** that explains the WebSocket API subscription requirements for Solana Tracker, including the necessary plan and setup steps. This is designed to render beautifully when pasted into the GitHub editor.
+
+---
+
+# Solana Tracker WebSocket API Setup
+
+The **Solana Tracker WebSocket API** allows you to stream real-time data such as token prices, liquidity updates, transactions, and notifications about new tokens or pools. To use this feature, you need to subscribe to the appropriate plan and configure your bot correctly.
+
+---
+
+## ⚠️ **Important Notes**
+- The WebSocket API is only available for **Premium**, **Business**, and **Enterprise** plans.
+- Ensure you have subscribed to the correct plan to access these features.
+- Never share your **API Key** or **WebSocket URL** with anyone.
+
+---
+
+## 💳 **Subscription Plans for WebSocket Access**
+
+To access the WebSocket API, you need to subscribe to one of the following plans:
+
+| **Plan**       | **Price**     | **Requests/Month** | **WebSocket Access** | **Features**                                                                 |
+|-----------------|--------------|--------------------|-----------------------|------------------------------------------------------------------------------|
+| Free           | Free          | 10,000            | ❌ No                 | Basic API access with limited requests.                                      |
+| Starter        | €14.99/month  | 50,000            | ❌ No                 | Increased request limits but no WebSocket access.                            |
+| Advanced       | €50/month     | 200,000           | ❌ No                 | Suitable for higher request needs but no WebSocket access.                   |
+| Pro            | €200/month    | 1,000,000         | ❌ No                 | Designed for large-scale API usage but no WebSocket access.                  |
+| Premium        | €397/month    | 10,000,000        | ✅ Yes                | Includes WebSocket access for real-time data streaming.                      |
+| Business       | €599/month    | 25,000,000        | ✅ Yes                | Higher request limits with WebSocket access.                                 |
+| Enterprise     | €1,499+/month | Custom            | ✅ Yes                | Unlimited requests and custom solutions with WebSocket access.               |
+
+### **Conclusion:**
+To use the WebSocket API:
+- Subscribe to the **Premium plan (€397/month)** or higher.
+- The Premium plan includes WebSocket access for real-time data streaming.
+
+---
+
+## 📝 Setting Up Your `.env` File
+
+Once you’ve subscribed to the appropriate plan and obtained your credentials:
+
+1. Open your `.env` file in a text editor:
+   ```bash
+   nano .env
+   ```
+
+2. Add your API key and WebSocket URL:
+   ```plaintext
+   # Solana Tracker API Key (replace with your actual key)
+   API_KEY=your_solana_tracker_api_key_here
+
+   # Solana RPC Endpoint URL (replace with your actual endpoint)
+   RPC_URL=https://api.mainnet-beta.solana.com
+
+   # Solana Tracker WebSocket URL
+   WS_URL=wss://websocket.solanatracker.io
+   ```
+
+3. Save and exit (`CTRL+O`, then `Enter`, followed by `CTRL+X`).
+
+---
+
+## 🌐 Configuring WebSocket Streams
+
+The WebSocket API allows you to subscribe to various rooms for real-time data streams.
+
+### Example Code: Connecting and Subscribing
+```javascript
+const WebSocket = require('ws');
+require('dotenv').config();
+
+const wsUrl = process.env.WS_URL;
+
+if (!wsUrl) {
+  console.error("WebSocket URL is not defined in .env file");
+  process.exit(1);
+}
+
+const socket = new WebSocket(wsUrl);
+
+socket.on('open', () => {
+  console.log('Connected to Solana Tracker WebSocket');
+
+  // Example: Subscribe to price updates for a specific pool ID
+  const poolId = 'examplePoolId';
+  socket.send(JSON.stringify({ type: 'join', room: `price:${poolId}` }));
+});
+
+socket.on('message', (data) => {
+  const message = JSON.parse(data);
+  console.log('Received message:', message);
+});
+
+socket.on('close', () => {
+  console.log('Disconnected from Solana Tracker WebSocket');
+});
+
+socket.on('error', (error) => {
+  console.error('WebSocket error:', error);
+});
+```
+
+---
+
+## 🗂️ Available Rooms for Subscriptions
+
+Here’s a table of available subscription rooms you can join via the WebSocket API:
+
+| **Room Name**                          | **Description**                                                                 |
+|----------------------------------------|---------------------------------------------------------------------------------|
+| `latest`                               | Updates about new tokens and pools.                                            |
+| `price:poolId`                         | Price updates for a specific pool (`poolId`).                                  |
+| `transaction:tokenAddress`             | Transactions for a specific token (`tokenAddress`).                            |
+| `transaction:tokenAddress:poolId`      | Transactions for a specific token pair and pool ID (`tokenAddress` & `poolId`).|
+| `price-by-token:tokenId`               | Price updates for a specific token (`tokenId`).                                |
+| `wallet:walletAddress`                 | Transactions involving a specific wallet (`walletAddress`).                    |
+| `pool:poolId`                          | Updates about changes in a specific pool (`poolId`).                           |
+| `graduating`                           | Notifications about graduating tokens nearing bonding curve completion.        |
+| `graduated`                            | Notifications about graduated tokens now available on Raydium.                |
+
+---
+
+## ✅ Testing Your Setup
+
+1. Start your bot by running:
+   ```bash
+   node websocket.js
+   ```
+
+2. Monitor the terminal output for connection success:
+   ```
+   Connected to Solana Tracker WebSocket
+   Subscribed to room: price:examplePoolId
+   ```
+
+3. Verify that you’re receiving real-time data from subscribed rooms.
+
+---
+
+## 🔧 Troubleshooting
+
+If you encounter issues while using the WebSocket API:
+
+### Common Issues:
+1. **Not Receiving Messages**:
+   - Ensure that your subscription messages are correctly formatted.
+   - Verify that your `WS_URL` is correct and accessible.
+   - Check if your subscription plan includes access to the required rooms.
+
+2. **Connection Errors**:
+   - Ensure that you have an active internet connection.
+   - Check if the Solana Tracker service is operational.
+
+3. **Invalid Credentials**:
+   - Double-check that your `.env` file contains the correct `API_KEY` and `WS_URL`.
+
+---
+
+By subscribing to the **Premium plan or higher**, configuring your `.env` file, and using the provided example code, you’ll have full access to Solana Tracker’s powerful WebSocket API for real-time data streaming!
+
+Here’s the **formatted response in GitHub Markdown** that explains the WebSocket API subscription requirements for Solana Tracker, including the necessary plan and setup steps. This is designed to render beautifully when pasted into the GitHub editor.
+
+---
+
+# Solana Tracker WebSocket API Setup
+
+The **Solana Tracker WebSocket API** allows you to stream real-time data such as token prices, liquidity updates, transactions, and notifications about new tokens or pools. To use this feature, you need to subscribe to the appropriate plan and configure your bot correctly.
+
+---
+
+## ⚠️ **Important Notes**
+- The WebSocket API is only available for **Premium**, **Business**, and **Enterprise** plans.
+- Ensure you have subscribed to the correct plan to access these features.
+- Never share your **API Key** or **WebSocket URL** with anyone.
+
+---
+
+## 💳 **Subscription Plans for WebSocket Access**
+
+To access the WebSocket API, you need to subscribe to one of the following plans:
+
+| **Plan**       | **Price**     | **Requests/Month** | **WebSocket Access** | **Features**                                                                 |
+|-----------------|--------------|--------------------|-----------------------|------------------------------------------------------------------------------|
+| Free           | Free          | 10,000            | ❌ No                 | Basic API access with limited requests.                                      |
+| Starter        | €14.99/month  | 50,000            | ❌ No                 | Increased request limits but no WebSocket access.                            |
+| Advanced       | €50/month     | 200,000           | ❌ No                 | Suitable for higher request needs but no WebSocket access.                   |
+| Pro            | €200/month    | 1,000,000         | ❌ No                 | Designed for large-scale API usage but no WebSocket access.                  |
+| Premium        | €397/month    | 10,000,000        | ✅ Yes                | Includes WebSocket access for real-time data streaming.                      |
+| Business       | €599/month    | 25,000,000        | ✅ Yes                | Higher request limits with WebSocket access.                                 |
+| Enterprise     | €1,499+/month | Custom            | ✅ Yes                | Unlimited requests and custom solutions with WebSocket access.               |
+
+### **Conclusion:**
+To use the WebSocket API:
+- Subscribe to the **Premium plan (€397/month)** or higher.
+- The Premium plan includes WebSocket access for real-time data streaming.
+
+---
+
+## 📝 Setting Up Your `.env` File
+
+Once you’ve subscribed to the appropriate plan and obtained your credentials:
+
+1. Open your `.env` file in a text editor:
+   ```bash
+   nano .env
+   ```
+
+2. Add your API key and WebSocket URL:
+   ```plaintext
+   # Solana Tracker API Key (replace with your actual key)
+   API_KEY=your_solana_tracker_api_key_here
+
+   # Solana RPC Endpoint URL (replace with your actual endpoint)
+   RPC_URL=https://api.mainnet-beta.solana.com
+
+   # Solana Tracker WebSocket URL
+   WS_URL=wss://websocket.solanatracker.io
+   ```
+
+3. Save and exit (`CTRL+O`, then `Enter`, followed by `CTRL+X`).
+
+---
+
+## 🌐 Configuring WebSocket Streams
+
+The WebSocket API allows you to subscribe to various rooms for real-time data streams.
+
+
+---
+
+## 🗂️ Available Rooms for Subscriptions
+
+Here’s a table of available subscription rooms you can join via the WebSocket API:
+
+| **Room Name**                          | **Description**                                                                 |
+|----------------------------------------|---------------------------------------------------------------------------------|
+| `latest`                               | Updates about new tokens and pools.                                            |
+| `price:poolId`                         | Price updates for a specific pool (`poolId`).                                  |
+| `transaction:tokenAddress`             | Transactions for a specific token (`tokenAddress`).                            |
+| `transaction:tokenAddress:poolId`      | Transactions for a specific token pair and pool ID (`tokenAddress` & `poolId`).|
+| `price-by-token:tokenId`               | Price updates for a specific token (`tokenId`).                                |
+| `wallet:walletAddress`                 | Transactions involving a specific wallet (`walletAddress`).                    |
+| `pool:poolId`                          | Updates about changes in a specific pool (`poolId`).                           |
+| `graduating`                           | Notifications about graduating tokens nearing bonding curve completion.        |
+| `graduated`                            | Notifications about graduated tokens now available on Raydium.                |
+
+---
+
+## ✅ Testing Your Setup
+
+1. Start your bot by running:
+   ```bash
+   node websocket.js
+   ```
+
+2. Monitor the terminal output for connection success:
+   ```
+   Connected to Solana Tracker WebSocket
+   Subscribed to room: price:examplePoolId
+   ```
+
+3. Verify that you’re receiving real-time data from subscribed rooms.
+
+---
+
+## 🔧 Troubleshooting
+
+If you encounter issues while using the WebSocket API:
+
+### Common Issues:
+1. **Not Receiving Messages**:
+   - Ensure that your subscription messages are correctly formatted.
+   - Verify that your `WS_URL` is correct and accessible.
+   - Check if your subscription plan includes access to the required rooms.
+
+2. **Connection Errors**:
+   - Ensure that you have an active internet connection.
+   - Check if the Solana Tracker service is operational.
+
+3. **Invalid Credentials**:
+   - Double-check that your `.env` file contains the correct `API_KEY` and `WS_URL`.
+
+---
+
+By subscribing to the **Premium plan or higher**, configuring your `.env` file, and using the provided example code, you’ll have full access to Solana Tracker’s powerful WebSocket API for real-time data streaming!
+
+
 
 ### **WebSocket Rooms Subscription Table**
 
@@ -187,8 +475,6 @@ RPC_URL=https://api.mainnet-beta.solana.com
 # WebSocket Configuration (replace with your WebSocket URL)
 WS_URL=wss://websocket.solanatracker.io
 ```
-
----
 
 
 
