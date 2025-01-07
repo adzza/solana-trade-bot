@@ -9,7 +9,7 @@ A **high-performance, automated trading bot** designed for trading Solana tokens
 ## ⚠️ Warning
 
 - **Never share your API keys or wallet private keys with anyone.**
-- **Do not paste your private keys or API keys into untrusted websites.**
+- **Do not paste your private keys or API keys into any websites or scripts you have mot personally verified as safe.**
 - Keep these sensitive details secure to protect your funds and data.
 
 ---
