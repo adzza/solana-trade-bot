@@ -1,4 +1,5 @@
 
+
 # Solana Trading Bot
 
 A **high-performance, automated trading bot** designed for trading Solana tokens with precision and efficiency. This bot leverages the **Solana Tracker API** to access real-time market data and integrates with multiple decentralized exchanges (DEXs) to execute trades seamlessly.
@@ -8,7 +9,7 @@ A **high-performance, automated trading bot** designed for trading Solana tokens
 ## ⚠️ Warning
 
 - **Never share your API keys or wallet private keys with anyone.**
-- **Do not paste your private keys or API keys into any websites.**
+- **Do not paste your private keys or API keys into untrusted websites.**
 - Keep these sensitive details secure to protect your funds and data.
 
 ---
@@ -120,7 +121,7 @@ Before using this bot, ensure you have the following:
 
 ## 📝 Setting Up the `.env` File
 
-To configure the bot, you need a **Solana Tracker Data API Key** and an **RPC Endpoint URL**. Follow these steps to obtain them and set up your `.env` file:
+To configure the bot, you need a **Solana Tracker Data API Key**, an **RPC Endpoint URL**, and a **WebSocket URL** for real-time data streaming.
 
 ### Step 1: Get a Free Solana Tracker Data API Key
 
@@ -134,7 +135,7 @@ To configure the bot, you need a **Solana Tracker Data API Key** and an **RPC En
 
 #### Option 1: Use a Free Public RPC
 Use the default Solana mainnet RPC:
-```plaintext
+```
 https://api.mainnet-beta.solana.com
 ```
 Note: Public RPCs are rate-limited and may not be suitable for high-frequency trading.
@@ -145,28 +146,16 @@ For better reliability and higher rate limits, consider using premium providers 
 - [Alchemy](https://www.alchemy.com/dapps/solana-tracker)
 - [Helius](https://dev.helius.xyz)
 
-### Step 3: Create and Configure Your `.env` File
+### Step 3: Get Your WebSocket URL
 
-1. Create a new `.env` file in your project directory:
-   ```bash
-   touch .env
-   ```
+1. Upgrade your Solana Tracker plan to Premium or higher to access WebSocket streaming.
+2. Navigate to the WebSocket section in your Solana Tracker dashboard.
+3. Copy your unique WebSocket URL (e.g., `wss://websocket.solanatracker.io`).
 
-2. Open the `.env` file in a text editor:
-   ```bash
-   nano .env
-   ```
+### Step 4: Add Configuration to `.env`
 
-3. Add the following content to your `.env` file:
+Add your API key, RPC URL, and WebSocket URL to your `.env` file:
 ```plaintext
-# Bot Configuration
-AMOUNT=0.001
-DELAY=1000
-MONITOR_INTERVAL=3000
-SLIPPAGE=25
-PRIORITY_FEE=0.00005
-JITO=false
-
 # Solana Tracker API Key (replace with your actual key)
 API_KEY=your_solana_tracker_api_key_here
 
@@ -174,31 +163,60 @@ API_KEY=your_solana_tracker_api_key_here
 RPC_URL=https://api.mainnet-beta.solana.com
 
 # WebSocket Configuration (replace with your WebSocket URL)
-WS_URL=wss://websocket-url-here
-
-# Wallet Configuration (replace with your wallet's private key in Base58 format)
-PRIVATE_KEY=your_base58_private_key_here
-
-# Token Filtering Parameters
-MIN_LIQUIDITY=1000
-MAX_LIQUIDITY=1000000
-MIN_MARKET_CAP=2000
-MAX_MARKET_CAP=10000000
-MIN_RISK_SCORE=0
-MAX_RISK_SCORE=8
-REQUIRE_SOCIAL_DATA=false
-
-# PnL Thresholds for Selling Positions
-MAX_NEGATIVE_PNL=-50
-MAX_POSITIVE_PNL=5
-
-# Markets to Trade On (Comma-Separated)
-MARKETS=raydium,orca,pumpfun,moonshot,raydium-cpmm
+WS_URL=wss://websocket.solanatracker.io
 ```
 
-4. Replace placeholders (`your_solana_tracker_api_key_here`, `your_base58_private_key_here`, etc.) with your actual values.
+---
 
-5. Save and exit (`CTRL+O`, then `Enter`, followed by `CTRL+X` in nano).
+## 🌐 Configuring WebSocket Streams
+
+The WebSocket API allows you to stream real-time data such as price updates, transactions, and token information.
+
+### Example Code for Connecting to the WebSocket
+
+```javascript
+const WebSocket = require('ws');
+require('dotenv').config();
+
+const wsUrl = process.env.WS_URL;
+
+if (!wsUrl) {
+  console.error("WebSocket URL is not defined in .env file");
+  process.exit(1);
+}
+
+const socket = new WebSocket(wsUrl);
+
+socket.on('open', () => {
+  console.log('Connected to Solana Tracker WebSocket');
+  
+  // Example: Subscribe to price updates for a specific pool ID
+  const poolId = 'examplePoolId';
+  socket.send(JSON.stringify({ type: 'join', room: `price:${poolId}` }));
+});
+
+socket.on('message', (data) => {
+  const message = JSON.parse(data);
+  console.log('Received message:', message);
+});
+
+socket.on('close', () => {
+  console.log('Disconnected from Solana Tracker WebSocket');
+});
+
+socket.on('error', (error) => {
+  console.error('WebSocket error:', error);
+});
+```
+
+### Available Rooms for Subscriptions
+
+| Room Name                             | Description                                                                 |
+|---------------------------------------|-----------------------------------------------------------------------------|
+| `latest`                              | Updates about new tokens and pools                                          |
+| `price:poolId`                        | Price updates for a specific pool                                           |
+| `transaction:tokenAddress`            | Transactions for a specific token                                           |
+| `wallet:walletAddress`                | Transactions involving a specific wallet                                    |
 
 ---
 
@@ -218,9 +236,24 @@ node websocket.js
 
 ---
 
-## ⚙️ Configuration
+## 📖 Definitions Table
 
-Customize the bot's behavior by adjusting settings in your `.env` file:
+Here’s a quick reference table explaining common terms used in this project:
+
+| Term/Acronym       | Definition                                                                                     |
+|--------------------|-----------------------------------------------------------------------------------------------|
+| **AMM**            | Automated Market Maker – A type of decentralized exchange that uses liquidity pools instead of order books. |
+| **V4**             | Version 4 – Refers to Raydium’s latest protocol version with improved features like routing efficiency. |
+| **CPMM**           | Constant Product Market Maker – An AMM formula where `x * y = k`, ensuring liquidity at all prices. |
+| **DEX**            | Decentralized Exchange – A platform that allows peer-to-peer trading without intermediaries.    |
+| **RPC**            | Remote Procedure Call – A protocol allowing interaction with blockchain nodes for data retrieval or transactions. |
+| **WebSocket**      | A communication protocol enabling real-time data streaming between client and server over a persistent connection.|
+
+---
+
+## ⚙️ Configuration Table
+
+Customize the bot’s behavior by adjusting settings in your `.env` file:
 
 | Setting                  | Description                                                                 |
 |--------------------------|-----------------------------------------------------------------------------|
@@ -229,24 +262,12 @@ Customize the bot's behavior by adjusting settings in your `.env` file:
 | `MONITOR_INTERVAL`      | Interval for monitoring positions (in milliseconds)                        |
 | `SLIPPAGE`              | Maximum allowed slippage (in percentage)                                   |
 | `PRIORITY_FEE`          | Priority fee for transactions                                              |
-| `JITO`                  | Set to "true" to use Jito for transaction processing                       |
-| `RPC_URL`               | Your Solana RPC URL                                                        |
-| `API_KEY`               | Your Solana Tracker API Key                                                |
-| `PRIVATE_KEY`           | Your wallet's private key                                                  |
-| `MIN_LIQUIDITY/MAX_LIQUIDITY` | Liquidity range for token selection                                      |
-| `MIN_MARKET_CAP/MAX_MARKET_CAP` | Market cap range for token selection                                   |
-| `MIN_RISK_SCORE/MAX_RISK_SCORE` | Risk score range for token selection                                   |
-| `REQUIRE_SOCIAL_DATA`    | Set to "true" to only trade tokens with social data                        |
-| `MAX_NEGATIVE_PNL/MAX_POSITIVE_PNL` | PnL thresholds for selling positions                              |
-| `MARKETS`               | Comma-separated list of markets to trade on                                |
 
 ---
 
 ## ❗ Disclaimer
 
-This bot is for educational purposes only. Use at your own risk. Always understand the code you're running and the potential financial implications of automated trading.
-
-The goal of this project is to demonstrate potential ways of using the Solana Tracker API.
+This bot is for educational purposes only. Use at your own risk.
 
 ---
 
@@ -256,32 +277,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome!  
-Feel free to check the [issues page](https://github.com/YZYLAB/solana-trade-bot/issues).
-
----
-
 ## ⭐ Support
 
 If you find this project helpful, please consider giving it a ⭐️ on GitHub!
 
---- 
-
-### Key Features:
-1. Proper headings (`#`, `##`) for clear sectioning.
-2. Tables (`|---`) are used for structured information like settings or supported platforms.
-3. Code blocks (` ```bash`) are used consistently for commands and example configurations.
-4. Emojis (`⚠️`, `📜`) add visual appeal while maintaining readability.
-
-Paste this directly into your GitHub README editor—it will render perfectly!
-
-Citations:
-[1] https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/quickstart-for-writing-on-github
-[2] https://www.freecodecamp.org/news/github-flavored-markdown-syntax-examples/
-[3] https://github.com/darsaveli/Readme-Markdown-Syntax
-[4] https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
-[5] https://dev.to/sameerkatija/github-markdown-cheat-sheet-everything-you-need-to-know-to-write-readme-md-2eca
-[6] https://www.youtube.com/watch?v=LfuY7EvxuH0
-[7] https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github
