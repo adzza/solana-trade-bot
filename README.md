@@ -146,18 +146,32 @@ For better reliability and higher rate limits, consider using premium providers 
 - [Alchemy](https://www.alchemy.com/dapps/solana-tracker)
 - [Helius](https://dev.helius.xyz)
 
+## 🌐 Configuring WebSocket Streams
+
+The WebSocket API allows you to stream real-time data such as price updates, transactions, and token information.
+
 ### Step 3: Get Your WebSocket URL
 
 1. Upgrade your Solana Tracker plan to Premium or higher to access WebSocket streaming.
 2. Navigate to the WebSocket section in your Solana Tracker dashboard.
 3. Copy your unique WebSocket URL (e.g., `wss://websocket.solanatracker.io`).
 
-##   Available Rooms for Subscriptions
 
-latest	Updates about new tokens and pools
-price:poolId	Price updates for a specific pool
-transaction:tokenAddress	Transactions for a specific token
-wallet:walletAddress	
+### **WebSocket Rooms Subscription Table**
+
+| **Room Name**                          | **Description**                                                                 |
+|----------------------------------------|---------------------------------------------------------------------------------|
+| `latest`                               | Updates about new tokens and pools.                                            |
+| `price:poolId`                         | Price updates for a specific pool (`poolId`).                                  |
+| `transaction:tokenAddress`             | Transactions for a specific token (`tokenAddress`).                            |
+| `transaction:tokenAddress:poolId`      | Transactions for a specific token pair and pool ID (`tokenAddress` & `poolId`).|
+| `price-by-token:tokenId`               | Price updates for a specific token (`tokenId`).                                |
+| `wallet:walletAddress`                 | Transactions involving a specific wallet (`walletAddress`).                    |
+| `pool:poolId`                          | Updates about changes in a specific pool (`poolId`).                           |
+| `graduating`                           | Notifications about graduating tokens nearing bonding curve completion.        |
+| `graduated`                            | Notifications about graduated tokens now available on Raydium.                |
+
+---
 
 
 ### Step 4: Add Configuration to `.env`
@@ -176,29 +190,7 @@ WS_URL=wss://websocket.solanatracker.io
 
 ---
 
-## 🌐 Configuring WebSocket Streams
 
-The WebSocket API allows you to stream real-time data such as price updates, transactions, and token information.
-
-
-
-### Available Rooms for Subscriptions
-
-### **WebSocket Rooms Table**
-
-| **Room Name**                          | **Description**                                                                 |
-|----------------------------------------|---------------------------------------------------------------------------------|
-| `latest`                               | Updates about new tokens and pools.                                            |
-| `price:poolId`                         | Price updates for a specific pool (`poolId`).                                  |
-| `transaction:tokenAddress`             | Transactions for a specific token (`tokenAddress`).                            |
-| `transaction:tokenAddress:poolId`      | Transactions for a specific token pair and pool ID (`tokenAddress` & `poolId`).|
-| `price-by-token:tokenId`               | Price updates for a specific token (`tokenId`).                                |
-| `wallet:walletAddress`                 | Transactions involving a specific wallet (`walletAddress`).                    |
-| `pool:poolId`                          | Updates about changes in a specific pool (`poolId`).                           |
-| `graduating`                           | Notifications about graduating tokens nearing bonding curve completion.        |
-| `graduated`                            | Notifications about graduated tokens now available on Raydium.                |
-
----
 
 ## ▶️ Usage
 
