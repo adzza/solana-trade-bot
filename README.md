@@ -172,42 +172,7 @@ WS_URL=wss://websocket.solanatracker.io
 
 The WebSocket API allows you to stream real-time data such as price updates, transactions, and token information.
 
-### Example Code for Connecting to the WebSocket
 
-```javascript
-const WebSocket = require('ws');
-require('dotenv').config();
-
-const wsUrl = process.env.WS_URL;
-
-if (!wsUrl) {
-  console.error("WebSocket URL is not defined in .env file");
-  process.exit(1);
-}
-
-const socket = new WebSocket(wsUrl);
-
-socket.on('open', () => {
-  console.log('Connected to Solana Tracker WebSocket');
-  
-  // Example: Subscribe to price updates for a specific pool ID
-  const poolId = 'examplePoolId';
-  socket.send(JSON.stringify({ type: 'join', room: `price:${poolId}` }));
-});
-
-socket.on('message', (data) => {
-  const message = JSON.parse(data);
-  console.log('Received message:', message);
-});
-
-socket.on('close', () => {
-  console.log('Disconnected from Solana Tracker WebSocket');
-});
-
-socket.on('error', (error) => {
-  console.error('WebSocket error:', error);
-});
-```
 
 ### Available Rooms for Subscriptions
 
