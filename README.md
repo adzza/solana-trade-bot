@@ -90,6 +90,7 @@ Before using this bot, ensure you have the following:
    apt install curl
    apt install git
    npm install dotenv bs58
+   npm install axios-retry
    npm update
    ```
 
