@@ -92,6 +92,7 @@ Before using this bot, ensure you have the following:
    npm install dotenv bs58
    npm install axios-retry
    npm install chalk@4.1.2 blessed
+   npm install public-ip
    npm update
    ```
 
